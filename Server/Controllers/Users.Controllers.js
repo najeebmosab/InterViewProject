@@ -1,7 +1,16 @@
 const UserModel = require('../Models/Users.Models');
 const ExamModel = require('../Models/Exam.Models');
 const ExamResultModel = require('../Models/ExamResult.Models');
+const dotenv = require("dotenv");
+const jwt = require("../JWT/tokenApi");
+dotenv.config();
 const bcrypt = require('bcrypt');
+const { Configuration, OpenAIApi } = require("openai");
+const apiKey = process.env.APIKEY;
+// openai.apiKey = "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";
+const configuration = new Configuration({
+  apiKey: apiKey,
+});
 
 const createUser = async (req, res) => {
   try {
@@ -19,8 +28,8 @@ const createUser = async (req, res) => {
     // Create and save the new user
     const user = new UserModel({ name, email, password: hashedPassword });
     await user.save();
-
-    return res.status(201).json(user);
+    const token = await jwt.createToken(user);
+    return res.status(201).json(user,token);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -28,9 +37,9 @@ const createUser = async (req, res) => {
 
 const createExamForUser = async (req, res) => {
   try {
-    const { userId,examId } = req.body;
+    const { userId, examId } = req.body;
 
-    const user = await UserModel.findById(userId);
+    const user = await UserModel.findById(userId || req.params.id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -43,7 +52,7 @@ const createExamForUser = async (req, res) => {
     user.exams.push(exam._id);
     await user.save();
 
-    return res.status(201).json(exam);
+    return true;
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -51,24 +60,43 @@ const createExamForUser = async (req, res) => {
 
 const calculateExamScore = async (req, res) => {
   try {
-    const { userId, examId, answers } = req.body;
-    const result =await createExamForUser(req, res);
-    console.log(result);
-    if(!result)return res.status(500).json({ message: "Error server to creat exam" });
-    const user = await UserModel.findById(userId).populate('exams');
-    const exam = await ExamModel.findById(examId).populate('questions');
+    const { examId, answers } = req.body;
+    const result = await createExamForUser(req, res);
+    if (!result) return;
+    const user = await UserModel.findById(req.params.id).populate('exams');
+    const exam = await ExamModel.findById(examId || req.params.exam_id).populate('questions');
 
+    const openai = new OpenAIApi(configuration);
     let score = 0;
-    exam.questions.forEach((question, index) => {
-      if (question.correctAnswer === answers[index]) {
+    for (let i = 0; i < exam.questions.length; i++) {
+      const question = exam.questions[i];
+      const userAnswer = answers.find(answer => answer.questionId == question._id);
+      const response = await openai.createCompletion({
+        model: "text-davinci-003",
+        prompt: `check if the user asnwer:${userAnswer.answer} for this question: ${question.question} is correct return true or false`,
+        temperature: 0.7,
+        max_tokens: 256,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+      });
+      const correctAnswer = response.data.choices[0].text.trim();
+      if (correctAnswer.toLocaleLowerCase() === 'true') {
         score++;
       }
-    });
+    }
+    // Calculate the total number of questions and passing score
+    const passingPercentage = 70;
+    const totalQuestions = exam.questions.length;
+    const passingScore = Math.ceil((passingPercentage / 100) * totalQuestions);
 
-    // Check if user passed the exam and update examResults accordingly
-    let passed = score >= exam.passingScore;
-    if (!passed) return res.status(500).json({ message: "you are faild" });
-    const examResult = new ExamResultModel({ exam: examId, score: score, passed: score >= exam.passingScore });
+    if (score < passingScore) {
+      // If the user failed the exam, you can provide them with the option to retake it
+      return res.status(200).json({ message: "You failed the exam. Do you want to retake it?", retake: true });
+    }
+
+    // If the user passed the exam, update examResults accordingly
+    const examResult = new ExamResultModel({ exam: examId, score: score, passed: true });
     user.examResults.push(examResult);
     await examResult.save();
 
@@ -81,8 +109,35 @@ const calculateExamScore = async (req, res) => {
   }
 };
 
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find the user with the provided email
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email Wrong" });
+    }
+
+    // Compare the provided password to the hashed password in the database
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch) {
+      return res.status(401).json({ message: "Invalid password Wrong " });
+    }
+
+    // Generate a JWT token for the user
+    const token = await jwt.createToken(user);
+
+    return res.status(200).json({ token, user });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+
 module.exports = {
   createUser,
   createExamForUser,
   calculateExamScore,
+  login
 };

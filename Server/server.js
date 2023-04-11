@@ -16,11 +16,14 @@ mongoose.connect(process.env.CONNECTION, {
 });
 
 // Enable CORS
-app.use(cors());
+app.use(cors({
+  origin: 'http://127.0.0.1:5173',
+  credentials: true
+}));
 
 // Parse incoming requests with JSON payloads
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: true }));
 // Mount user router
 app.use('/users', userRouter);
 app.use('/company', companyRouter);

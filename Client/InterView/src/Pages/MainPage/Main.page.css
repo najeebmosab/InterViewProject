@@ -1,0 +1,19 @@
+.containerCard {
+    width: 80%;
+    margin: 50px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 20px;
+}
+
+@media screen and (max-width: 768px) {
+    .containerCard {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .containerCard {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}

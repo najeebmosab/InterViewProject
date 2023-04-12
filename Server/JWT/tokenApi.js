@@ -8,9 +8,14 @@ function createToken(user) {
 }
 
 function Verify(token) {
-    const verfiy = jwt.verify(token, process.env.SECRET)
-    console.log("verfiy", verfiy);
-    return verfiy;
+    try {
+        console.log(token);
+        const verfiy = jwt.verify(token, process.env.SECRET)
+        console.log("verfiy", verfiy);
+        return verfiy;
+    }catch(err){
+        console.log(err);
+    }
 }
 
 module.exports = { createToken, Verify }

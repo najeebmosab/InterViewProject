@@ -14,6 +14,7 @@ ul {
 
 .pagination a {
     color: #000;
+    font-weight: 900;
     float: left;
     padding: 8px 16px;
     text-decoration: none;
@@ -21,6 +22,9 @@ ul {
     border: 1px solid #ddd;
     margin: 0 4px;
     cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    border-radius: 100%;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 .pagination a.active {

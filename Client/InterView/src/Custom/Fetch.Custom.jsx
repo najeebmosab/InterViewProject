@@ -3,7 +3,7 @@ async function FetchCustom(params) {
     const token = localStorage.getItem("token")
     const res = await fetch(params.url, {
         method: params.method,
-        body: JSON.stringify(params.body),
+        body: JSON.stringify(params.body)??{},
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',

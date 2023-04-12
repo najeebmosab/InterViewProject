@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FetchCustom } from "../Custom/Fetch.Custom";
+import { useNavigate } from "react-router-dom";
 function SignUpHandler(params) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");

@@ -23,8 +23,12 @@
 
 .card-body {
     padding: 16px;
+    
 }
-
+.myCard-body{
+    height: 200px;
+    position: relative;
+}
 .card-title {
     font-size: 20px;
     margin-bottom: 8px;
@@ -35,7 +39,7 @@
 }
 
 .btn-primary {
-    width: 100%;
+width: -webkit-fill-available;
     background-color: #6c5ce7;
     border: none;
     color: #fff;
@@ -48,8 +52,15 @@
 }
 
 .btn-primary:hover {
-    background-color: #6c5ce7;
+    background-color: #9b59b6;
     border-color: #7664fc;
+}
+
+.myBTN {
+    left: 0;
+    margin:0px 10px;
+    position: absolute;
+    bottom: 10px;
 }
 
 @media (max-width: 768px) {

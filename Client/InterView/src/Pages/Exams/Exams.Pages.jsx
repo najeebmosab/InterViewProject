@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React,{ useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FetchCustom } from "../../Custom/Fetch.Custom";
 import { Pagination } from "../../Components/Pagination/Pagination.Component";

@@ -1,0 +1,102 @@
+.form-exam-container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.form-exam-header {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.form-exam-question {
+  margin-bottom: 2rem;
+}
+
+.form-exam-question h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-exam-answer {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 1.2rem;
+  resize: vertical;
+}
+
+.form-exam-submit {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-exam-submit:hover {
+  background-color: #388e3c;
+}
+
+.form-exam-error {
+  color: #ff0000;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+
+.form-exam-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.form-exam-modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.form-exam-modal-header {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-exam-modal-message {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.form-exam-modal-button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-exam-modal-button:hover {
+  background-color: #388e3c;
+}

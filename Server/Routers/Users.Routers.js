@@ -4,6 +4,6 @@ const { createUser, calculateExamScore,login } = require('../Controllers/Users.C
 const { calculateExamScoreMiddleware } = require("../Middleware/calculateExamScore.Middleware");
 const { errorMiddleware } = require("../Middleware/middleware");
 router.post('/', createUser);
-router.post('/:id/exams/:exam_id', calculateExamScore);
+router.post('/calculateExamScore', calculateExamScore);
 router.post('/login', login);
 module.exports = router;

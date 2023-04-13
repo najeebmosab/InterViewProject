@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React,{ useState } from "react";
 import "./Navbar.Component.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'

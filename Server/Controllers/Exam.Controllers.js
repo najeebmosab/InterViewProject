@@ -1,10 +1,11 @@
 const Company = require('../Models/Company.Models');
 const Exam = require('../Models/Exam.Models');
 const Question = require('../Models/Question.Models');
-const jwt = require("jsonwebtoken");
+const checkTokens = require("../Middleware/token.middleware");
 // POST route to create an exam with questions for a company
 const createExam = async (req, res) => {
   try {
+
     const company = await Company.findById(req.params.id);
 
     if (!company) {
@@ -42,11 +43,9 @@ const createExam = async (req, res) => {
 };
 
 const getExamById = async (req, res, next) => {
-  const examId = req.params.id;
-
   try {
-    const exam = await Exam.findById(examId);
-
+    const verify = checkTokens(req, res);
+    const exam = await Exam.findById(req.body.id).populate('questions');
     if (!exam) {
       return res.status(404).json({ message: 'Exam not found' });
     }
@@ -59,14 +58,9 @@ const getExamById = async (req, res, next) => {
 };
 
 const getExamsByCompanyId = async (req, res) => {
-  const auth = req.headers["authorization"];
-  if (!auth || !auth.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "you are not login Please login" });
-  }
 
-  const token = auth.split(" ")[1];
   try {
-    const verify = jwt.verify(JSON.parse(token), process.env.SECRET);
+    const verify = checkTokens(req, res);
     const company = await Company.findById(req.body.companyId);
     if (!company) {
       return res.status(404).json({ error: 'Company not found' });

@@ -2,16 +2,15 @@ const UserModel = require('../Models/Users.Models');
 const ExamModel = require('../Models/Exam.Models');
 const ExamResultModel = require('../Models/ExamResult.Models');
 const dotenv = require("dotenv");
-const jwt = require("../JWT/tokenApi");
 dotenv.config();
 const bcrypt = require('bcrypt');
 const { Configuration, OpenAIApi } = require("openai");
 const apiKey = process.env.APIKEY;
-// openai.apiKey = "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";
 const configuration = new Configuration({
   apiKey: apiKey,
 });
-
+const jwt = require("../JWT/tokenApi");
+const checkTokens = require("../Middleware/token.middleware");
 const createUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -29,7 +28,7 @@ const createUser = async (req, res) => {
     const user = new UserModel({ name, email, password: hashedPassword });
     await user.save();
     const token = await jwt.createToken(user);
-    return res.status(201).json(user,token);
+    return res.status(201).json(user, token);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -37,11 +36,12 @@ const createUser = async (req, res) => {
 
 const createExamForUser = async (req, res) => {
   try {
-    const { userId, examId } = req.body;
-
-    const user = await UserModel.findById(userId || req.params.id);
+    const {examId } = req.body;
+    const verfiy = await checkTokens(req,res)
+    console.log(verfiy);
+    const user = await UserModel.findById(verfiy.id);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" }); 
     }
 
     const exam = await ExamModel.findById(examId);
@@ -60,11 +60,12 @@ const createExamForUser = async (req, res) => {
 
 const calculateExamScore = async (req, res) => {
   try {
-    const { examId, answers } = req.body;
+    const { answers } = req.body;
     const result = await createExamForUser(req, res);
+    const verfiy = await checkTokens(req,res)
     if (!result) return;
-    const user = await UserModel.findById(req.params.id).populate('exams');
-    const exam = await ExamModel.findById(examId || req.params.exam_id).populate('questions');
+    const user = await UserModel.findById(verfiy.id).populate('exams');
+    const exam = await ExamModel.findById(req.body.examId).populate('questions');
 
     const openai = new OpenAIApi(configuration);
     let score = 0;
@@ -96,14 +97,14 @@ const calculateExamScore = async (req, res) => {
     }
 
     // If the user passed the exam, update examResults accordingly
-    const examResult = new ExamResultModel({ exam: examId, score: score, passed: true });
+    const examResult = new ExamResultModel({ exam: req.body.examId, score: score, passed: true });
     user.examResults.push(examResult);
     await examResult.save();
 
     user.examResults.push(examResult._id);
     await user.save();
 
-    res.status(200).json({ score: score });
+    res.status(200).json({ score: score,passed: true,message:"you are passed an exam" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

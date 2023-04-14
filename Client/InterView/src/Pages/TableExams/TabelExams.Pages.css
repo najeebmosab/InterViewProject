@@ -1,0 +1,112 @@
+.addNewExam {
+    padding: 10px;
+    background-color: #fff;
+    overflow: auto;
+}
+
+.addNewExam a {
+    padding: 10px;
+    background-color: #28a745;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 700;
+    float: right;
+    border-radius: 5px;
+}
+
+.addNewExam a:hover {
+    background-color: #218838;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0px auto;
+}
+
+thead th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+    transition: background-color 0.2s ease-in-out;
+}
+
+thead th:hover {
+    background-color: #e6e6e6;
+}
+
+thead th::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-left: 6px solid #333;
+    transition: transform 0.2s ease-in-out;
+}
+
+thead th.asc::before {
+    transform: translateY(-50%) rotate(-135deg);
+}
+
+thead th.desc::before {
+    transform: translateY(-50%) rotate(45deg);
+}
+
+tbody td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.2s ease-in-out;
+}
+
+tbody tr:hover {
+    background-color: #f2f2f2;
+}
+
+@media screen and (max-width: 600px) {
+    table {
+        width: 100%;
+        font-size: 14px;
+    }
+}
+
+
+@media screen and (max-width: 600px) {
+    td {
+        border-bottom: none;
+        position: relative;
+        padding-left: 50%;
+        text-align: left;
+    }
+
+    td:before {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        content: attr(data-column);
+    }
+
+    tbody td:before {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 30%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        content: attr(data-column);
+    }
+}

@@ -9,7 +9,7 @@
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Question',
     }],
-  });
+  },{ timestamps: true }); // Add this to enable timestamps
 
   const Exam = mongoose.model('Exam', examSchema);
 

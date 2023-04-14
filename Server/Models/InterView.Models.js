@@ -16,7 +16,7 @@ const interviewSchema = new mongoose.Schema({
     enum: ['scheduled', 'completed', 'cancelled'],
     default: 'scheduled',
   },
-});
+},{ timestamps: true });
 
 const Interview = mongoose.model('Interview', interviewSchema);
 

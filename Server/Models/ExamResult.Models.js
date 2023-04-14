@@ -14,7 +14,7 @@ const examResultSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
-});
+},{ timestamps: true });
 
 const ExamResult = mongoose.model('ExamResult', examResultSchema);
 

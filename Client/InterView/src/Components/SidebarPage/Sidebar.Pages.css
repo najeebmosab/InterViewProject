@@ -1,0 +1,83 @@
+/* General styles */
+.sidebar {
+  background-color: #f8f9fa;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  color: #343a40;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar li {
+  margin-bottom: 10px;
+}
+
+.sidebar a {
+  color: #6c757d;
+  font-size: 1.2rem;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.sidebar a:hover {
+  color: #007bff;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background-color: #f8f9fa;
+    overflow-x: hidden;
+    transition: all 0.5s ease-in-out;
+  }
+
+  .sidebar h2 {
+    color: #343a40;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .sidebar ul {
+    margin-top: 10px;
+  }
+
+  .sidebar a {
+    color: #6c757d;
+    font-size: 1.2rem;
+    display: block;
+    padding: 10px;
+    border-bottom: 1px solid #f8f9fa;
+  }
+
+  .sidebar a:hover {
+    background-color: #007bff;
+    color: #f8f9fa;
+  }
+
+  .navbar-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 2rem;
+    color: #6c757d;
+  }
+
+  .navbar-toggle:hover {
+    color: #007bff;
+  }
+}

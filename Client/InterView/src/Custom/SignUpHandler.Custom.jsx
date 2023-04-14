@@ -15,18 +15,19 @@ function SignUpHandler(params) {
     const method = "POST";
 
     const handleSubmit = async (e) => {
+        debugger
         e.preventDefault();
         if (name.trim() === "") {
             setNameError("Name is required");
             return;
-        }else{
+        } else {
             setName("");
         }
 
         if (email.trim() === "") {
             setEmailError("Email is required");
             return;
-        }else{
+        } else {
             setEmail("");
         }
 
@@ -36,7 +37,7 @@ function SignUpHandler(params) {
         } else if (password.length < 6) {
             setPasswordError("Password must be at least 6 characters long");
             return;
-        }else{
+        } else {
             setPassword("");
         }
 
@@ -50,10 +51,13 @@ function SignUpHandler(params) {
             if (data.message) {
                 setErrorModal(data.message);
                 setShowModal(true);
+                return
             }
-            localStorage.setItem("User", JSON.stringify(data?.user));
-            localStorage.setItem("token", JSON.stringify(data?.token));
-            navigate("/MainPage")
+            else {
+                localStorage.setItem("User", JSON.stringify(data?.user));
+                localStorage.setItem("token", JSON.stringify(data?.token));
+                navigate("/MainPage")
+            }
 
             // Do something with the response, such as redirecting to a new page or displaying a success message
         } catch (error) {
@@ -62,7 +66,7 @@ function SignUpHandler(params) {
         }
     };
 
-    return {handleSubmit,showModal,setShowModal,name,nameError,setName,setNameError,email,emailError,setEmail,setEmailError,password,setPassword,setPasswordError,passwordError,errorModal};
+    return { handleSubmit, showModal, setShowModal, name, nameError, setName, setNameError, email, emailError, setEmail, setEmailError, password, setPassword, setPasswordError, passwordError, errorModal };
 }
 
 export { SignUpHandler }

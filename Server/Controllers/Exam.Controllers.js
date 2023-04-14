@@ -66,7 +66,10 @@ const getExamsByCompanyId = async (req, res) => {
       return res.status(404).json({ error: 'Company not found' });
     }
     const exams = await Exam.find({ _id: { $in: company.exams } });
-    res.status(200).json(exams);
+    if (exams.length === 0) {
+      return res.status(200).json({message:`no exams for this company ${company.name}`});  
+    }
+    return res.status(200).json(exams);
   } catch (err) {
     return res.status(401).json({ message: "Unauthorized" });
   }

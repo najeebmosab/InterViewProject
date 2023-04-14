@@ -11,6 +11,7 @@ const configuration = new Configuration({
 });
 const jwt = require("../JWT/tokenApi");
 const checkTokens = require("../Middleware/token.middleware");
+
 const createUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -28,7 +29,7 @@ const createUser = async (req, res) => {
     const user = new UserModel({ name, email, password: hashedPassword });
     await user.save();
     const token = await jwt.createToken(user);
-    return res.status(201).json(user, token);
+    return res.status(201).json({user, token});
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

@@ -9,6 +9,9 @@ import { ExamPages } from "./Pages/Exam/Exam.Pages";
 import { CompanyAuthForm } from './Pages/AuthCompany/AuthCompany.pages';
 import { ExamTable } from './Pages/TableExams/TabelExams.Pages';
 import { CompanyMain } from './Pages/CompanyMainPage/CompanyMain.Pages';
+import { NewExamForm } from './Pages/AddNewExam/NewExam.Pages';
+import { EditExam } from './Pages/EditExam/EditExam.Pages';
+import { UsersPage } from './Pages/UsersPage/Users.Pages';
 
 function App() {
 
@@ -28,6 +31,18 @@ function App() {
         {
           path: "",
           element: <ExamTable />
+        },
+        {
+          path: "AddNewExam",
+          element: <NewExamForm />
+        },
+        {
+          path: "EditExam/:id",
+          element: <EditExam />
+        },
+        {
+          path: "users",
+          element: <UsersPage />
         }
       ]
     },

@@ -1,0 +1,32 @@
+.questionUpdate {
+    display: flex;
+    align-items: center;
+}
+
+.questionUpdate input[type="text"] {
+    margin-right: 10px;
+    width: 50%;
+}
+
+.questionUpdate button {
+    margin-right: 10px;
+}
+
+button {
+    background-color: #0077cc;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #005fa3;
+}
+
+.questionBorederBottom {
+    border-bottom: #ddd solid 1px;
+    margin: 10px 0px;
+    padding: 10px 0px;
+}

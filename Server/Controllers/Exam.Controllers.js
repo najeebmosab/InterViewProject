@@ -20,7 +20,7 @@ const createExam = async (req, res) => {
     // Calculate the correct answer for each question using the OpenAI API
 
     for (const question of questions) {
-      questionsArray.push({ question: question.question });
+      questionsArray.push({ question: question });
     }
 
     // Create the questions for the exam
@@ -67,7 +67,7 @@ const getExamsByCompanyId = async (req, res) => {
     }
     const exams = await Exam.find({ _id: { $in: company.exams } });
     if (exams.length === 0) {
-      return res.status(200).json({message:`no exams for this company ${company.name}`});  
+      return res.status(200).json({ message: `no exams for this company ${company.name}` });
     }
     return res.status(200).json(exams);
   } catch (err) {
@@ -75,9 +75,57 @@ const getExamsByCompanyId = async (req, res) => {
   }
 };
 
+const deleteExam = async (req, res) => {
+  const { examId } = req.body;
+
+  try {
+    // Find the exam and populate the questions
+    await Exam.findByIdAndDelete(examId);
+    await Question.deleteMany({ exam: examId });
+
+    res.status(200).json({
+      message: 'Exam and all associated questions deleted successfully.',
+    });
+  } catch (error) {
+    console.error('Error deleting exam:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+const updateExam = async (req, res) => {
+  try {
+    const { name, questions } = req.body;
+
+    // Update exam name
+    const exam = await Exam.findByIdAndUpdate(
+      req.params.id,
+      { name },
+      { new: true }
+    );
+
+    // Update questions
+    for (const question of questions) {
+      if (question._id) {
+        await Question.findByIdAndUpdate(
+          question._id,
+          { question: question?.questionText},
+          { new: true }
+        );
+      }
+    }
+    // Save updated exam
+    await exam.save();
+
+    res.json({exam});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 module.exports = {
   createExam,
   getExamById,
-  getExamsByCompanyId
+  getExamsByCompanyId,
+  deleteExam,
+  updateExam
 };

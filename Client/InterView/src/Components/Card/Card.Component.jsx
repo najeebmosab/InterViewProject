@@ -13,7 +13,7 @@ const Card = ({ data }) => {
 
   return (
     <div className="card">
-      <img src={data.photo} alt={data.name} className="card-img-top" />
+      <img src={"http://localhost:5000/uploads/"+data.photo} alt={data.name} className="card-img-top" />
       <div className="card-body">
         <h5 className="card-title">Company Name: {data.name}</h5>
         <br />

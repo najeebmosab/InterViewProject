@@ -3,7 +3,7 @@ const jwt = require("../JWT/tokenApi");
 const fs = require("fs");
 const checkTokens = require("../Middleware/token.middleware");
 const bcrypt = require('bcrypt');
-
+const ExamResult = require("../Models/ExamResult.Models");
 const createCompany = async (req, res) => {
   try {
     const existingCompany = await Company.findOne({ $or: [{ email: req.body.email }, { name: req.body.name }] });
@@ -18,9 +18,9 @@ const createCompany = async (req, res) => {
       const parts = file.name.split('.');
       const ext = parts[parts.length - 1];
       filename = Date.now() + '.' + ext;
-      const path = __dirname + '/uploads/' + filename;
+      const path = "C:\Users\najee\Desktop\mernFinalProject\interViewProject\Server/uploads/" + filename;
       const bufferData = Buffer.from(file.data.split(',')[1], 'base64');
-      const directory = __dirname + '/uploads';
+      const directory = "C:\Users\najee\Desktop\mernFinalProject\interViewProject\Server/uploads/";
 
       if (!fs.existsSync(directory)) {
         fs.mkdirSync(directory);
@@ -58,7 +58,7 @@ const getCompany = async (req, res) => {
     }
     console.log(company);
     const token = await jwt.createToken(company);
-    return res.status(200).json({company,token});
+    return res.status(200).json({ company, token });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error" });
@@ -99,9 +99,28 @@ const updateCompany = async (req, res) => {
   }
 };
 
+const getExamResultsByCompanyExams = async (req, res) => {
+  try {
+    const company = await Company.findById(req.body.companyId).populate('exams');
+    if (!company) {
+      return res.status(404).json({ message: 'Company not found' });
+    }
+    const examIds = company.exams.map(exam => exam._id);
+    const examResults = await ExamResult.find({ exam: { $in: examIds } }).populate('exam');
+    if (examResults.length === 0) {
+      return res.status(200).json({ message: 'no one pass exam' });
+    }
+    res.json({ examResults });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+};
+
 module.exports = {
   createCompany,
   getAllCompanies,
   updateCompany,
-  getCompany
+  getCompany,
+  getExamResultsByCompanyExams
 };

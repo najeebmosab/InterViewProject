@@ -28,7 +28,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/users', userRouter);
 app.use('/company', companyRouter);
 app.use('/exam', examRouter);
-
+console.log(__dirname + '/uploads');
+app.use('/uploads', express.static(__dirname + '/uploads'));
 // Mount error handler middleware
 app.use(errorHandler);
 

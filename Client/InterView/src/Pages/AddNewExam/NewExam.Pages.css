@@ -1,0 +1,115 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.form-label {
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.form-input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    width: 100%;
+    font-size: 16px;
+}
+
+.form-textarea {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    width: 100%;
+    font-size: 16px;
+    resize: vertical;
+}
+
+.form-question-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.form-question-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.form-question-textarea {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+    width: 100%;
+    font-size: 16px;
+    resize: vertical;
+}
+
+.form-question-button {
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    background-color: #c21f1f;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-button {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #0b84d6;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-button:hover {
+    background-color: #064b87;
+}
+
+.questionDiv{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+}
+.questionDiv label,textarea{
+    width: -webkit-fill-available;
+}
+.add-question-btn,
+.remove-question-btn {
+  border: none;
+  color: #fff;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.add-question-btn{
+    background-color: #064b87;
+}
+.remove-question-btn{
+    background-color: #c21f1f;
+}
+.add-question-btn:hover{
+    background-color: #0b84d6;
+
+}
+.remove-question-btn:hover {
+  background-color:  #dd2626;
+}

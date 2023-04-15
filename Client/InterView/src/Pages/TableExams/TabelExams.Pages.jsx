@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { FetchCustom } from "../../Custom/Fetch.Custom";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ModalView } from '../../Custom/Modal.Custom';
+import { faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
 
+import { ButtonComponent } from "../../Components/Button/Button.Components";
 import "./TabelExams.Pages.css"
 
 const ExamTable = () => {
@@ -63,11 +65,31 @@ const ExamTable = () => {
         });
     };
 
+    const handleRemoveExam = async (examId) => {
+        const confirmDelete = window.confirm('Are you sure you want to delete this exam?');
+        if (confirmDelete) {
+            // Delete the exam
+            const url = "http://localhost:5000/exam";
+            const body = {
+                examId
+            };
+            const method = "DELETE"
+            const data = await FetchCustom({ url, method, body });
+
+            setErrorMessageData(data.message);
+            openModal();
+        }
+    };
+
+    const handleUpdateExam = async (examId) => { 
+        navigate("EditExam/"+examId);
+    }
+
     return (
         <>
             <div className="containerTable">
                 <div className='addNewExam'>
-                    <Link>Add New Exam</Link>
+                    <Link to="AddNewExam">Add New Exam</Link>
                 </div>
                 <table>
                     <thead className={isSmallScreen ? 'small-screen' : ''}>
@@ -75,6 +97,7 @@ const ExamTable = () => {
                             <th onClick={(event) => handleSort(event, 'name')}>Name</th>
                             <th onClick={(event) => handleSort(event, 'createdAt')}>Created At</th>
                             <th onClick={(event) => handleSort(event, 'updatedAt')}>Updated At</th>
+                            <th>Controll</th>
                         </tr>
                     </thead>
 
@@ -84,6 +107,11 @@ const ExamTable = () => {
                                 <td>{exam.name}</td>
                                 <td>{exam.createdAt}</td>
                                 <td>{exam.updatedAt}</td>
+                                <td>
+                                    <ButtonComponent className={"remove-btn"} onClick={() => handleRemoveExam(exam._id)} icon={faTrashAlt} />
+                                    <ButtonComponent className={"update-btn"} onClick={() => handleUpdateExam(exam._id)} icon={faEdit} />
+                                </td>
+
                             </tr>
                         ))}
                     </tbody>

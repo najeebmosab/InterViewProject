@@ -1,16 +1,18 @@
 import React from 'react';
 import './Sidebar.Pages.css';
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
+  // const arr = ["/users","/CompanyMainPage"]
   return (
     <div className="sidebar">
       <h2>Navigation</h2>
       <ul>
         <li>
-          <a href="/users">Users</a>
+          <Link to="users">Users</Link>
         </li>
         <li>
-          <a href="/exams">Exams</a>
+          <Link to="/CompanyMainPage">Exams</Link>
         </li>
       </ul>
       <div className="navbar-toggle">

@@ -1,0 +1,22 @@
+/* Styling for the button component */
+.button {
+    border: none;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 0px 5px;
+}
+
+/* Styling for the delete button */
+.remove-btn {
+    background-color: #e74c3c;
+}
+
+/* Styling for the edit button */
+.update-btn {
+    background-color: #f1c40f;
+}

@@ -4,6 +4,8 @@ const fs = require("fs");
 const checkTokens = require("../Middleware/token.middleware");
 const bcrypt = require('bcrypt');
 const ExamResult = require("../Models/ExamResult.Models");
+const User = require("../Models/Users.Models");
+
 const createCompany = async (req, res) => {
   try {
     const existingCompany = await Company.findOne({ $or: [{ email: req.body.email }, { name: req.body.name }] });
@@ -110,6 +112,14 @@ const getExamResultsByCompanyExams = async (req, res) => {
     if (examResults.length === 0) {
       return res.status(200).json({ message: 'no one pass exam' });
     }
+    
+    // // Loop through each exam result and populate the user email
+    // for (const examResult of examResults) {
+    //   const user = await User.findOne({ examResults: examResult._id }).select('email');
+    //   console.log(user.email);
+    //   examResult.user = user.email;
+    // }
+    
     res.json({ examResults });
   } catch (err) {
     console.error(err.message);

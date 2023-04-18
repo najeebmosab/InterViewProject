@@ -29,6 +29,7 @@ function ExamPages() {
   const method = "POST";
 
   const getExamData = async () => {
+    debugger
     const data = await FetchCustom({ url, method, body });
     if (data.message) {
       setErrorMessageData(data.message);

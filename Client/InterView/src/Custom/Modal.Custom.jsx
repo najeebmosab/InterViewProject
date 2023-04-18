@@ -15,10 +15,9 @@ function ModalView(params) {
         <div>
             {/* <button onClick={openModal}>Open Modal</button> */}
             <Modal show={params.showModal} onClose={params.onClose}>
-                <h1>Error Handler</h1>
-                <p>{params.errorMessage}</p>
+                <h1>{params.errorMessage}</h1>
             </Modal>
         </div>
     </>)
 }
-export {ModalView}
+export { ModalView }

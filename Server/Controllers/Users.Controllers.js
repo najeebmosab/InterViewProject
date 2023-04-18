@@ -11,6 +11,8 @@ const configuration = new Configuration({
 });
 const jwt = require("../JWT/tokenApi");
 const checkTokens = require("../Middleware/token.middleware");
+const sgClient = require('@sendgrid/client');
+sgClient.setApiKey(process.env.EMAIL_KEY);
 
 const createUser = async (req, res) => {
   try {
@@ -29,7 +31,7 @@ const createUser = async (req, res) => {
     const user = new UserModel({ name, email, password: hashedPassword });
     await user.save();
     const token = await jwt.createToken(user);
-    return res.status(201).json({user, token});
+    return res.status(201).json({ user, token });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -37,12 +39,12 @@ const createUser = async (req, res) => {
 
 const createExamForUser = async (req, res) => {
   try {
-    const {examId } = req.body;
-    const verfiy = await checkTokens(req,res)
+    const { examId } = req.body;
+    const verfiy = await checkTokens(req, res)
     console.log(verfiy);
     const user = await UserModel.findById(verfiy.id);
     if (!user) {
-      return res.status(404).json({ message: "User not found" }); 
+      return res.status(404).json({ message: "User not found" });
     }
 
     const exam = await ExamModel.findById(examId);
@@ -63,7 +65,7 @@ const calculateExamScore = async (req, res) => {
   try {
     const { answers } = req.body;
     const result = await createExamForUser(req, res);
-    const verfiy = await checkTokens(req,res)
+    const verfiy = await checkTokens(req, res)
     if (!result) return;
     const user = await UserModel.findById(verfiy.id).populate('exams');
     const exam = await ExamModel.findById(req.body.examId).populate('questions');
@@ -98,14 +100,47 @@ const calculateExamScore = async (req, res) => {
     }
 
     // If the user passed the exam, update examResults accordingly
-    const examResult = new ExamResultModel({ exam: req.body.examId, score: score, passed: true });
+    const examResult = new ExamResultModel({ exam: req.body.examId, score: score, passed: true,userEmail:user.email });
     user.examResults.push(examResult);
     await examResult.save();
 
     user.examResults.push(examResult._id);
     await user.save();
+    const requestBody = {
+      'name': 'My Sender Authentication',
+      'from': {
+        'email': `mousab.921@gmail.com`,
+        'name': `${user.name}`
+      },
+      'reply_to': {
+        'email': `najeebmosab@gmail.com`,
+        'name': 'mousab'
+      },
+      'address': '123 Ha-Yarkon St.',
+      'city': 'jerusalem',
+      'state': '',
+      'zip': '	9985000',
+      'country': 'Israel',
+      'phone': '555-555-1234',
+      'default': true
+    };
 
-    res.status(200).json({ score: score,passed: true,message:"you are passed an exam" });
+    const request = {
+      method: 'POST',
+      url: '/v3/senders',
+      body: requestBody
+    };
+
+    sgClient.request(request)
+      .then(([response, body]) => {
+        console.log(response.statusCode);
+        console.log(body);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    res.status(200).json({ score: score, passed: true, message: "you are passed an exam" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

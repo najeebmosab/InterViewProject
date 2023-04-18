@@ -51,6 +51,7 @@ const FormExam = ({ exam }) => {
     };
     const data = await FetchCustom({ url, body, method });
     if (data.message) {
+      if (data.passed === true) localStorage.setItem("passed",JSON.stringify(data.passed));
       setErrorMessageData(data.message);
       openModal();
       return

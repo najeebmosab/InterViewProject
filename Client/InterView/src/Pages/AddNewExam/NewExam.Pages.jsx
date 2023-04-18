@@ -115,7 +115,7 @@ function NewExamForm() {
             ))}
             <button type="button" onClick={handleAddQuestion} className="add-btn add-question-btn">Add Question <FontAwesomeIcon icon={faPlus} /></button>
             <button type="submit">Create Exam</button>
-            <ModalView showModal={showModal} onClose={closeModal} errorMessage={errorMessageData} />
+            <ModalView showModal={showModal} onClose={closeModal}  errorMessage={errorMessageData} />
         </form>
     );
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FetchCustom } from '../../Custom/Fetch.Custom';
 import { ModalView } from '../../Custom/Modal.Custom';
 import { useNavigate } from 'react-router-dom';
+
 function UsersPage(params) {
     const [examResults, setExamResults] = useState([]);
     const [sortBy, setSortBy] = useState('createdAt'); // default sort by createdAt field
@@ -10,6 +11,7 @@ function UsersPage(params) {
     const [errorMessageData, setErrorMessageData] = useState("");
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
+    
     const openModal = () => {
         setShowModal(true);
     };
@@ -30,9 +32,9 @@ function UsersPage(params) {
             if (data.message) {
                 openModal();
                 setErrorMessageData(data.message);
-                return
+                return;
             }
-            setExamResults(data.examResults)
+            setExamResults(data.examResults);
         }
         getExamResults();
     }, []);
@@ -44,6 +46,18 @@ function UsersPage(params) {
             setSortBy(field);
             setSortOrder('desc'); // default to descending order for new sort field
         }
+        setExamResults((prevResults) => {
+            return prevResults.sort((a, b) => {
+                if (sortOrder === 'desc') {
+                    if (a[field] < b[field]) return 1;
+                    if (a[field] > b[field]) return -1;
+                } else {
+                    if (a[field] < b[field]) return -1;
+                    if (a[field] > b[field]) return 1;
+                }
+                return 0;
+            });
+        });
     };
 
     return (
@@ -51,7 +65,8 @@ function UsersPage(params) {
             <table>
                 <thead>
                     <tr>
-                        <th onClick={() => handleSort('exam')}>Exam</th>
+                        <th onClick={() => handleSort('name')}>Exam</th>
+                        <th onClick={() => handleSort('userEmail')}>User Email</th>
                         <th onClick={() => handleSort('score')}>Score</th>
                         <th onClick={() => handleSort('passed')}>Passed</th>
                         <th onClick={() => handleSort('createdAt')}>Created At</th>
@@ -60,7 +75,8 @@ function UsersPage(params) {
                 <tbody>
                     {examResults.map((result) => (
                         <tr key={result._id}>
-                            <td>{result.exam}</td>
+                            <td>{result.exam.name}</td>
+                            <td>{result.userEmail}</td>
                             <td>{result.score}</td>
                             <td>{result.passed.toString()}</td>
                             <td>{new Date(result.createdAt).toLocaleString()}</td>
